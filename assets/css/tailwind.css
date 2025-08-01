@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme static {
+  --font-sans: 'Public Sans', sans-serif;
+	 /* 主色（Base） */
+  --ui-primary:       #212121;
+	--color-white: 		  #ffffff;
+
+  /* Primary 色階 */
+  --ui-primary-100:   #e4e5e6;
+  --ui-primary-200:   #cacbcd;
+  --ui-primary-300:   #afb1b5;
+  --ui-primary-400:   #95979c;
+  --ui-primary-500:   #7b7d83;
+  --ui-primary-600:   #626469;
+  --ui-primary-700:   #494b4f;
+  --ui-primary-800:   #292828;
+  --ui-primary-900:   #242222;
+
+	--ui-color-neutral-100:  #f1f2f2;
+  --ui-color-neutral-200:  #d7dada;
+  --ui-color-neutral-300:  #bdc1c1;
+  --ui-color-neutral-400:  #a2a8a8;
+  --ui-color-neutral-500:  #889090;
+  --ui-color-neutral-600:  #626469;
+  --ui-color-neutral-700:  #494b4f;
+  --ui-color-neutral-800:  #292828;
+  --ui-color-neutral-900:  #242222;
+}
+
+
+.dark  {
+  --ui-primary: var(--ui-primary-100);
+  --ui-text-dimmed: var(--ui-primary-500);
+  --ui-text-muted: var(--ui-primary-400);
+  --ui-text-toned: var(--ui-primary-300);
+  --ui-text: var(--ui-primary-200);
+  --ui-text-primary: var(--ui-primary-200);
+  --ui-text-highlighted: var(--color-white);
+  --ui-text-inverted: var(--ui-primary-900);
+
+  --ui-bg: var(--ui-primary-800);
+  --ui-bg-muted: var(--ui-primary-600);
+  --ui-bg-elevated: var(--ui-primary-700);
+  --ui-bg-accented: var(--ui-primary-500);
+  --ui-bg-inverted: var(--color-white);
+
+  --ui-border: var(--ui-primary-800);
+  --ui-border-muted: var(--ui-primary-700);
+  --ui-border-accented:  var(--color-white);
+  --ui-border-inverted: var(--color-white);
+
+  .text-black {
+    color: var(--ui-primary);
+  }
+
+}
