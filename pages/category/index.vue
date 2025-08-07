@@ -1,17 +1,13 @@
 <template>
-  <div>
-    <a class="text-3xl font-bold underline">
-      category page
-    </a>
+  <LayoutsPage>
     <client-only>
       <TiptapEditor v-model="content" />
     </client-only>
     <div class="tiptap">
-      <label>Content</label>
       <div v-html="content"></div>
       <div>{{ content }}</div>
     </div>
-  </div>
+  </LayoutsPage>
 
 </template>
 
