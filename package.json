@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "init": "rm -rf node_modules && yarn install"
+    "initModules": "rm -rf node_modules && yarn install"
   },
   "dependencies": {
     "@nuxt/eslint": "1.7.1",
@@ -16,6 +16,10 @@
     "@nuxt/ui": "3.3.0",
     "@nuxtjs/color-mode": "3.5.2",
     "@pinia/nuxt": "0.11.2",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tiptap/pm": "^3.0.9",
+    "@tiptap/starter-kit": "^3.0.9",
+    "@tiptap/vue-3": "^3.0.9",
     "eslint": "^9.0.0",
     "nuxt": "^3.17.7",
     "pinia": "^3.0.3",
@@ -23,6 +27,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "sass-embedded": "^1.90.0",
     "typescript": "^5.9.2",
     "vue-tsc": "^3.0.5"
   },

@@ -56,3 +56,46 @@
   }
 
 }
+
+.tiptap :first-child {
+  @apply mt-0;
+}
+
+.tiptap h1 {
+  @apply text-3xl font-bold mt-8 mb-4 first:mt-0 last:mb-0;
+}
+
+/* Code and preformatted text styles */
+.tiptap code {
+  @apply bg-purple-200 rounded-[0.4rem] text-black text-[0.85rem] px-[0.3em] py-[0.25em];
+}
+
+.tiptap pre {
+  @apply bg-neutral-400 rounded-[0.2rem] text-black font-mono m-6 p-[0.75rem] pl-[1rem] w-1/2 overflow-x-auto;
+}
+
+.tiptap pre code {
+  @apply bg-transparent text-inherit text-[0.8rem] p-0;
+}
+
+.tiptap blockquote {
+  @apply border-l-4 border-gray-300 ml-4 my-6 pl-4;
+}
+
+.tiptap hr {
+  @apply border-t border-gray-200 my-8;
+}
+
+/* Lists */
+.tiptap ul {
+  @apply list-disc list-inside my-4;
+}
+
+.tiptap ol {
+  @apply list-decimal list-inside ;
+}
+
+.tiptap li {
+  @apply mb-2;
+}
+

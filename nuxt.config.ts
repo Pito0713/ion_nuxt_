@@ -1,15 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
-        baseURL: '/',
-        head: {
-            title: "ion-nuxt",
-            meta: [
-                { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-            ],
-            link: [],
-        },
+    baseURL: '/',
+    head: {
+        title: "ion-nuxt",
+        meta: [
+            { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        ],
+        link: [],
     },
+    pageTransition: { name: 'page', mode: 'out-in' }
+  },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   modules: [
@@ -43,5 +44,5 @@ export default defineNuxtConfig({
     classSuffix: '',
     storage: 'localStorage', // or 'sessionStorage' or 'cookie'
     storageKey: 'nuxt-color-mode'
-  }
+  },
 })

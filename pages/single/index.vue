@@ -1,12 +1,13 @@
 <template>
-    <div>    
-        <a class="text-3xl font-bold underline">
-          single page
-        </a>
-        <NuxtLink to="/main">main page</NuxtLink>
-    </div>
+  <div>
+    <a class="text-3xl font-bold underline">
+      single page
+    </a>
+    <!-- <TiptapEditor /> -->
+  </div>
 
 </template>
 
 <script setup>
+// import TiptapEditor from '~/components/mode/TiptapEditor.vue';
 </script>
