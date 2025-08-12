@@ -18,7 +18,8 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@pinia/nuxt',
     '@nuxt/fonts',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    '@tresjs/nuxt',
   ],
   runtimeConfig: {
         public: {

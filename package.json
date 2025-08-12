@@ -21,9 +21,11 @@
     "@tiptap/pm": "^3.0.9",
     "@tiptap/starter-kit": "^3.0.9",
     "@tiptap/vue-3": "^3.0.9",
+    "@tresjs/nuxt": "4.0.0",
     "eslint": "^9.0.0",
     "nuxt": "^3.17.7",
     "pinia": "^3.0.3",
+    "three": ">=0.133",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   },
