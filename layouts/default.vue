@@ -1,9 +1,10 @@
 <template>
   <div class="h-svh w-dvw">
-    <NavigationMenu />
-    <main class='relative'>
-      <NuxtPage />
-    </main>
+      
+      <main class='relative md:flex'>
+        <NavigationMenu />
+        <NuxtPage class="md:ml-64"/>
+      </main>
     <Footer />
   </div>
 </template>

@@ -16,14 +16,14 @@ const router = useRouter()
 // Three.js 和物理模擬相關的核心變數
 let scene, camera, labelRenderer, animId
 let width = 0, height = 0, containerRect
-let R_MIN = 16, R_MAX = 44
+let R_MIN = 16, R_MAX = 40
 
 // ===== 物理參數 =====
 const SPEED_BASE = 150 // 基礎速度
-const CENTER_K = 0.1 // 較小的中心吸引力，讓它們不會跑出畫面太遠
-const DRAG_PER_SEC = 0.5 // 降低阻力，讓它們能漂浮更久
-const RESTITUTION_BALL = 0.5 // 球與球之間的彈性碰撞係數
-const RESTITUTION_WALL = 0.5 // 提高牆壁彈性係數，讓它們能彈開
+const CENTER_K = 0.2 // 較小的中心吸引力，讓它們不會跑出畫面太遠
+const DRAG_PER_SEC = 0.2 // 降低阻力，讓它們能漂浮更久
+const RESTITUTION_BALL = 0.2 // 球與球之間的彈性碰撞係數
+const RESTITUTION_WALL = 0.2 // 提高牆壁彈性係數，讓它們能彈開
 const SUBSTEPS = 2
 const STOP_EPS = 10 // 停止速度閾值
 const BG_COLOR = 0xffffff
@@ -39,7 +39,6 @@ class Ball {
   sizeT = Math.random()
   speedFactor = 0.7 + Math.random() * 0.6
   route = ''
-  animTimer = Math.random() * Math.PI * 2 // 新增：用於字體大小動畫的獨立計時器
   constructor(opts) { Object.assign(this, opts); this.m = this.r * this.r }
 }
 const balls = []
@@ -83,7 +82,11 @@ function timeToSizeT(time) {
 
 // 根據容器寬度計算球體半徑的範圍
 function radiusRangeForWidth(w) {
-  const min = THREE.MathUtils.clamp(Math.round(w * 0.045), 35, 30)
+  // value = 計算出來的比例
+  // minLimit = 16 → 最小不能小於 16px 半徑
+  // maxLimit = 40 → 最大不能大於 40px 半徑
+  const min = THREE.MathUtils.clamp(Math.round(w * 0.045), 16, 40)
+  
   const maxRaw = Math.round(w * 0.045)
   const max = THREE.MathUtils.clamp(maxRaw, min + 10, 120)
   return { R_MIN: min, R_MAX: max }
@@ -93,7 +96,7 @@ function radiusRangeForWidth(w) {
 // 建立球體的 DOM 元素
 // @param {object} { 半徑 r, 標籤文字 label, 路由 route } 
 // ----------------------------------------------------
-function createCircleElement({ r, label, route }) {
+function createCircleElement({ r, label }) {
   // 圓形容器
   const el = document.createElement('div')
   el.style.cssText = `
@@ -103,8 +106,6 @@ function createCircleElement({ r, label, route }) {
     border-radius:9999px;
     pointer-events:auto;
     touch-action:none;
-    cursor:${route ? 'grab' : 'default'};
-   
   `
   //  /* 玻璃擬態效果 */
   //   background: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
@@ -120,12 +121,18 @@ function createCircleElement({ r, label, route }) {
   const labelEl = document.createElement('div')
   labelEl.textContent = label ?? ''
   labelEl.style.cssText = `
-    position:absolute; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    font-weight:800; letter-spacing:.5px; text-align:center; pointer-events:none;
-    color:rgba(20,20,20,.85);
-    text-shadow:0 1px 0 rgba(255,255,255,.35);
-    font-size:${Math.round(r * 0.3)}px;
+    position:absolute; 
+    inset:0;
+    display:flex; 
+    align-items:center; 
+    justify-content:center;
+    font-weight:800;
+    letter-spacing:.5px;
+    text-align:center;
+    pointer-events:none;
+    color:rgba(20,20,20,0.85);
+    text-shadow:0 5px 5 rgba(255,255,255,0.85);
+    font-size:${Math.round( r / 2 )}px;
   `
   el.appendChild(labelEl)
 
@@ -216,6 +223,7 @@ function clampToBounds(x, y, r) {
 // 初始化 Three.js 場景、攝影機、渲染器，並生成所有球體
 // ----------------------------------------------------
 function setupScene() {
+  const colorMode = useColorMode()
   scene = new THREE.Scene()
 
   // 獲取容器尺寸
@@ -226,7 +234,8 @@ function setupScene() {
     ; ({ R_MIN, R_MAX } = radiusRangeForWidth(width))
   // 用 BG_COLOR 當容器背景（可改成任意色或漸層）
   const bg = `#${new THREE.Color(BG_COLOR).getHexString()}`
-  container.value.style.background = bg
+  console.log(colorMode.value)
+  container.value.style.background =  bg 
 
 
   // 設定正交攝影機
@@ -437,11 +446,6 @@ onMounted(() => {
         // 更新位置
         b.obj.position.x += b.v.x * h
         b.obj.position.y += b.v.y * h
-        // ===== 新增：字體大小的「呼吸」動畫 =====
-        b.animTimer += h * 2 // 調整動畫速度，數值越大變化越快
-        const scaleFactor = 1 + Math.sin(b.animTimer) * 0.08 // 0.08 為振幅，數值越大變化越明顯
-        b.labelEl.style.fontSize = `${Math.round(b.baseFontSize * scaleFactor)}px`
-        // ======================================
       }
       // 處理牆壁碰撞
       wallCollisions()
@@ -460,9 +464,11 @@ onMounted(() => {
 // ----------------------------------------------------
 function wallCollisions() {
   for (const b of balls) {
-    const r = b.r
-    const left = -width / 2 + r, right = width / 2 - r
-    const top = height / 2 - r, bottom = -height / 2 + r
+    const r = b.r + 30
+    const left = -width / 2 + r 
+    const right = width / 2 - r 
+    const top = height / 2 - r
+    const bottom = -height / 2 + r
     const p = b.obj.position
     // 檢查左右牆壁
     if (p.x <= left) { p.x = left; b.v.x = -b.v.x * RESTITUTION_WALL }
@@ -482,7 +488,7 @@ function ballCollisions() {
       const A = balls[i], B = balls[j]
       const pa = A.obj.position, pb = B.obj.position
       const dx = pb.x - pa.x, dy = pb.y - pa.y
-      const minD = A.r + B.r
+      const minD = A.r * 1.5 + B.r
       const distSq = dx * dx + dy * dy
       if (distSq >= minD * minD) continue // 如果沒有重疊，則跳過
 

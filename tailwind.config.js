@@ -9,6 +9,6 @@ export default {
     "./error.vue",
   ],
   theme: {},
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')]
 }
 
