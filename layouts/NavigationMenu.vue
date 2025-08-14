@@ -8,6 +8,7 @@ const items = ref([
     { label: 'main', icon: 'i-lucide-book-open', to: '/main', class: 'justify-center items-center p-3' },
     { label: 'single', icon: 'i-lucide-database', to: '/single', class: 'justify-center items-center p-3' },
     { label: 'category', icon: 'i-lucide-database', to: '/category', class: 'justify-center items-center p-3' },
+    { label: 'test', icon: 'i-lucide-database', to: '/test', class: 'justify-center items-center p-3' },
     { slot: 'components' as const }
   ]
 ] satisfies NavigationMenuItem[][])
@@ -23,31 +24,16 @@ watch(isOpen, (open) => {
   <div>
     <div>
       <!-- 桌面版導覽 -->
-      <aside
-         class="hidden md:flex fixed left-0 top-0 h-screen w-64 z-40 shrink-0
+      <aside class="hidden md:flex fixed left-0 top-0 h-screen w-64 z-40 shrink-0
          border-r border-black/10 bg-white/70 dark:bg-neutral-900/70 backdrop-blur
-         overflow-y-auto"
-      >
+         overflow-y-auto">
         <div class="flex flex-col w-full p-4 gap-4 overflow-y-auto">
           <!-- 垂直導航 -->
-          <UNavigationMenu
-            orientation="vertical"
-            color="primary"
-            highlight
-            :items="items"
-            class="flex-1"
-          >
+          <UNavigationMenu orientation="vertical" color="primary" highlight :items="items" class="flex-1">
             <template #components-trailing>
               <div class="mt-2 flex items-center justify-between px-1">
-                <UButton
-                  variant="ghost"
-                  color="neutral"
-                  icon="i-simple-icons-github"
-                  to="https://github.com/Pito0713"
-                  target="_blank"
-                  :padded="false"
-                  aria-label="GitHub"
-                />
+                <UButton variant="ghost" color="neutral" icon="i-simple-icons-github" to="https://github.com/Pito0713"
+                  target="_blank" :padded="false" aria-label="GitHub" />
                 <ColorModeButton />
               </div>
             </template>
@@ -58,7 +44,8 @@ watch(isOpen, (open) => {
 
       <!-- 行動版 -->
       <div class="flex justify-between items-center md:hidden w-svw p-3">
-        <UButton color="primary" variant="ghost" aria-label="Open menu" icon='i-lucide-menu' @click="isOpen = !isOpen" />
+        <UButton color="primary" variant="ghost" aria-label="Open menu" icon='i-lucide-menu'
+          @click="isOpen = !isOpen" />
         <div>
           <UButton variant="ghost" color="neutral" icon="i-simple-icons-github" to="https://github.com/Pito0713"
             target="_blank" :padded="false" aria-label="GitHub" />

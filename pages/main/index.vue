@@ -9,13 +9,11 @@
     </ClientOnly>
     <ul>
       <li v-for="post in posts" :key="post.id" class="py-6">
-        <UCard class="w-full" >
+        <UCard class="w-full">
           <!-- header -->
           <template #header>
-            <NuxtLink
-              :to="`/single`"
-              class="text-2xl md:text-3xl font-extrabold leading-tight text-neutral-900 hover:underline"
-            >
+            <NuxtLink :to="`/single`"
+              class="text-2xl md:text-3xl font-extrabold leading-tight text-neutral-900 hover:underline">
               {{ post.title }}
             </NuxtLink>
           </template>
@@ -38,10 +36,8 @@
 
             <!-- 右：縮圖（固定寬度） -->
             <div class="md:w-36">
-              <NuxtLink
-                :to="`/blog/${post.slug}`"
-                class="block w-full h-36 rounded-lg overflow-hidden bg-neutral-100 shadow-sm"
-              >
+              <NuxtLink :to="`/blog/${post.slug}`"
+                class="block w-full h-36 rounded-lg overflow-hidden bg-neutral-100 shadow-sm">
                 <img :src="post.cover" :alt="post.title" loading="lazy" class="w-full h-full object-cover" />
               </NuxtLink>
             </div>
@@ -54,8 +50,8 @@
 
 <script setup>
 import MainThreeCanvas from '~/components/common/MainThreeCanvas.client.vue'
-const { data } = await useApiFetch('/users/3b1a0a83-d329-42af-8270-5168c7594237')
-const posts  = [
+const { data } = await useApiFetch('/blogs')
+const posts = [
   {
     id: 1,
     title: 'Three',

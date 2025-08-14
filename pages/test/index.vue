@@ -1,28 +1,17 @@
 <template>
   <LayoutsPage>
-    <client-only>
-      <TiptapEditor v-model="content" />
-    </client-only>
-    <div class="tiptap">
-      <div v-html="content"></div>
-      <div>{{ content }}</div>
-    </div>
     <UButton label='open' color="neutral" variant="subtle" @click="createPost" />
   </LayoutsPage>
 
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import TiptapEditor from '~/components/common/TiptapEditor.vue';
-const content = ref('<p>Im running Tiptap with Vue3333.js. 🎉</p>')
-
 async function createPost() {
   try {
     const created = await useApiFetch('/blogs', {
       method: 'POST',
       body: {
-        text: content.value
+        text: 'asd'
       },
     })
     console.log('created', created)
