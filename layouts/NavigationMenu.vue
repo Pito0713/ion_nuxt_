@@ -5,9 +5,10 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 import ColorModeButton from '../components/common/ColorModeButton.vue'
 const items = ref([
   [
-    { label: 'main', icon: 'weui:home-filled', to: '/main', class: 'w-full justify-center md:justify-between items-center p-3' },
-    { label: 'category', icon: 'weui:tag-filled', to: '/category', class: 'w-full justify-center md:justify-between items-center p-3' },
-    { label: 'single', icon: 'i-lucide-database', to: '/single', class: 'w-full justify-center md:justify-between items-center p-3' },
+    { label: 'main', icon: 'i-lucide-book-open', to: '/main', class: 'justify-center items-center p-3' },
+    { label: 'single', icon: 'i-lucide-database', to: '/single', class: 'justify-center items-center p-3' },
+    { label: 'category', icon: 'i-lucide-database', to: '/category', class: 'justify-center items-center p-3' },
+    { label: 'test', icon: 'i-lucide-database', to: '/test', class: 'justify-center items-center p-3' },
     { slot: 'components' as const }
   ]
 ] satisfies NavigationMenuItem[][])

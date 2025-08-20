@@ -87,11 +87,13 @@
 }
 
 .tiptap pre {
-  @apply bg-neutral-200 rounded-[0.2rem] text-black font-mono p-[0.75rem] pl-[1rem] w-full overflow-x-auto;
+  @apply bg-neutral-200 rounded-[0.2rem] text-black font-mono p-[0.75rem] pl-[1rem] w-full overflow-x-auto whitespace-pre-wrap;
 }
 
 .tiptap pre code {
-  @apply bg-transparent text-inherit text-[0.85rem];
+  @apply bg-transparent text-inherit text-[0.85rem] whitespace-pre-wrap;
+    word-break: break-all;
+  overflow-wrap: break-word; /* 較新的標準屬性 */
 }
 
 .tiptap blockquote {
