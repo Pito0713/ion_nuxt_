@@ -66,9 +66,15 @@ const content = ref('<p>Im running Tiptap with Vue.js. 🎉</p>')
 
 async function createPost() {
   try {
-    const created = await useApiFetch('/blogs', {
+    const payload = {
+      title: form.value.title,
+      textContent: content.value,
+      tags: [{ uuid: '1', label: '5' }], // 例：把 modal 的 tag 一起送
+    }
+    const created = await $fetch('http://localhost:8082/blogs', {
       method: 'POST',
-      body: {}
+      body: payload,
+      credentials: 'include'
     })
     console.log('created', created)
   } catch (err) {
