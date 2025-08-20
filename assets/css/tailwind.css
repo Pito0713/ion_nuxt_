@@ -56,3 +56,62 @@
   }
 
 }
+
+.tiptap :first-child {
+  @apply mt-0;
+}
+
+.tiptap.ProseMirror {
+  @apply min-h-[10rem] p-2 rounded-[0.2rem] min-h-[10rem] border-2
+}
+
+.tiptap.ProseMirror.ProseMirror-focused {
+  @apply outline-none
+}
+
+.tiptap h1 {
+  @apply text-3xl font-bold mt-4 mb-4 first:mt-0 last:mb-0;
+}
+
+.tiptap h2 {
+  @apply text-2xl font-bold mt-3 mb-3 first:mt-0 last:mb-0;
+}
+
+.tiptap h3 {
+  @apply text-xl font-bold mt-2 mb-2 first:mt-0 last:mb-0;
+}
+
+/* Code and preformatted text styles */
+.tiptap code {
+  @apply bg-neutral-200 rounded-[0.2rem] text-black text-[0.85rem] px-[0.3em] py-[0.25em];
+}
+
+.tiptap pre {
+  @apply bg-neutral-200 rounded-[0.2rem] text-black font-mono p-[0.75rem] pl-[1rem] w-full overflow-x-auto;
+}
+
+.tiptap pre code {
+  @apply bg-transparent text-inherit text-[0.85rem];
+}
+
+.tiptap blockquote {
+  @apply border-l-4 border-gray-300 ml-4 my-6 pl-4;
+}
+
+.tiptap hr {
+  @apply border-t border-gray-300 my-3;
+}
+
+/* Lists */
+.tiptap ul {
+  @apply list-disc list-outside ml-6;
+}
+
+.tiptap ol {
+  @apply list-decimal list-outside  ml-6;
+}
+
+.tiptap li {
+  @apply mb-2;
+}
+
