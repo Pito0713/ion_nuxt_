@@ -2,12 +2,12 @@
 import UI from './UI.vue'
 import { useHook } from './useHook'
 
-const { createPost, items, addTagValue } = useHook()
+const { createTags, formSubmit, tagItems, addTagValue, form } = useHook()
 </script>
 
 <template>
   <LayoutsPage>
-    <!-- 注意這裡 -->
-    <UI :items="items" :add-tag-value="addTagValue" @create_post="createPost" />
+    <UI v-model:add-tag-value="addTagValue" v-model:form="form" :tag-items="tagItems" @create-tags="createTags"
+      @form-submit="formSubmit" />
   </LayoutsPage>
 </template>
