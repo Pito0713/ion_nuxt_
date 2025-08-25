@@ -15,7 +15,7 @@ const props = defineProps<{
   tagItems: InputMenuItem[],
   addTagValue: string
   form: {
-    tag: { label: string, uuid: string },
+    tag: string,
     title: string,
     content: string
   }
@@ -23,9 +23,7 @@ const props = defineProps<{
 
 const showModal = ref(false)
 const schema = z.object({
-  tag: z.object({
-    label: z.string().nonempty('請選擇狀態'),
-  }),
+  tag: z.string().nonempty('請選擇狀態'),
   title: z.string().nonempty('標題必填'),
 })
 
@@ -49,8 +47,8 @@ const create_tags = () => {
       </template>
     </UIModal>
     <UForm :state="props.form" :schema="schema" @submit="emit('form-submit')">
-      <UFormField label="狀態" name="tag.label">
-        <UInputMenu :model-value="props.form.tag" :items="props.tagItems"
+      <UFormField label="狀態" name="tag">
+        <UInputMenu :model-value="props.form.tag" :items="props.tagItems" value-key="uuid"
           @update:modelValue="v => emit('update:form', { ...props.form, tag: v })" />
       </UFormField>
       <UFormField label="標題" name="title">
