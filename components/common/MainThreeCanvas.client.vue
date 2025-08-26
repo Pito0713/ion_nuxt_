@@ -62,7 +62,7 @@ let timeRange = {
   has: false // 是否有有效數據
 }
 function analyzeTime(items) {
-  const vals = items.map(i => Number(i?.time)).filter(n => Number.isFinite(n))
+  const vals = items.map(i => Number(i?.tagCount)).filter(n => Number.isFinite(n))
   if (!vals.length) return { min: 0, max: 1, has: false }
   const min = Math.min(...vals), max = Math.max(...vals)
   return { min, max, has: true }
@@ -86,7 +86,7 @@ function radiusRangeForWidth(w) {
   // minLimit = 16 → 最小不能小於 16px 半徑
   // maxLimit = 40 → 最大不能大於 40px 半徑
   const min = THREE.MathUtils.clamp(Math.round(w * 0.045), 16, 40)
-  
+
   const maxRaw = Math.round(w * 0.045)
   const max = THREE.MathUtils.clamp(maxRaw, min + 10, 120)
   return { R_MIN: min, R_MAX: max }
@@ -132,7 +132,7 @@ function createCircleElement({ r, label }) {
     pointer-events:none;
     color:rgba(20,20,20,0.85);
     text-shadow:0 5px 5 rgba(255,255,255,0.85);
-    font-size:${Math.round( r / 2 )}px;
+    font-size:${Math.round(r / 2)}px;
   `
   el.appendChild(labelEl)
 
@@ -235,7 +235,7 @@ function setupScene() {
   // 用 BG_COLOR 當容器背景（可改成任意色或漸層）
   const bg = `#${new THREE.Color(BG_COLOR).getHexString()}`
   console.log(colorMode.value)
-  container.value.style.background =  bg 
+  container.value.style.background = bg
 
 
   // 設定正交攝影機
@@ -262,7 +262,7 @@ function setupScene() {
   for (let i = 0; i < count; i++) {
     const item = items[i] ?? {}
     const sizeT =
-      Number.isFinite(Number(item.time)) ? timeToSizeT(Number(item.time))
+      Number.isFinite(Number(item.tagCount)) ? timeToSizeT(Number(item.tagCount))
         : (typeof item.size === 'number' ? THREE.MathUtils.clamp(item.size, 0, 1) : Math.random())
     const r = THREE.MathUtils.lerp(R_MIN, R_MAX, sizeT)
     spawnList.push({ item, sizeT, r })
@@ -465,8 +465,8 @@ onMounted(() => {
 function wallCollisions() {
   for (const b of balls) {
     const r = b.r + 30
-    const left = -width / 2 + r 
-    const right = width / 2 - r 
+    const left = -width / 2 + r
+    const right = width / 2 - r
     const top = height / 2 - r
     const bottom = -height / 2 + r
     const p = b.obj.position
@@ -538,7 +538,7 @@ onBeforeUnmount(() => {
 .wrap {
   position: relative;
   width: 100%;
-  height: 70vh;
+  height: 45vh;
   overflow: hidden;
 }
 </style>
