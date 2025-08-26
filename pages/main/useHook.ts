@@ -23,28 +23,45 @@ type BlogResp = { data: Blog[]; status: number; totalCount: number }
 type TagResp  = { data: Tag[];  status: number; }
 
 export function useHook() {
+  const { $sanitize } = useNuxtApp()
 
-  //  分頁狀態
+  // 分頁狀態
   const page = ref(1)
   const pageSize = ref(10)
 
-  // 不用 await，直接拿到 refs
-  const { data: blogResp, pending: blogPending} =
+  const { data: blogResp, pending: blogPending } =
     useApiFetch<BlogResp>('/blogs', { key: 'blogs:list' })
 
-  const { data: tagResp,  pending: tagPending} =
-    useApiFetch<TagResp>('/tags',  { key: 'tags:list'  })
+  const { data: tagResp, pending: tagPending } =
+    useApiFetch<TagResp>('/tags', { key: 'tags:list' })
 
-  // 用 computed 把形狀「剝殼」成最終要給 UI 用的資料
-  const blogInfo = computed<Blog[]>(() => blogResp.value?.data ?? [])
+  // ✅ 在這裡做 sanitize（不改動原資料，回傳一份處理後的）
+  const blogInfo = computed<Blog[]>(() => {
+    const rows = blogResp.value?.data ?? []
+    return rows.map((b) => ({
+      ...b,
+      textContent: $sanitize(b.textContent, {
+        // 可選：限制允許的標籤/屬性，依需求調整
+        ALLOWED_TAGS: [
+          'h1','h2','h3','h4','h5','h6',
+          'p','blockquote','pre','code','br',
+          'ul','ol','li','strong','em','a','hr'
+        ],
+        ALLOWED_ATTR: ['href','title','target','rel'],
+        FORBID_TAGS: ['script','style','iframe'],
+        FORBID_ATTR: ['onerror','onload','onclick']
+      })
+    }))
+  })
+
   const blogTotalCount = computed(() => blogResp.value?.totalCount ?? 0)
-  const tagInfo  = computed<Tag[]>(()  => tagResp.value?.data  ?? [])
+  const tagInfo  = computed<Tag[]>(() => tagResp.value?.data ?? [])
   const tagReady = computed(() => !tagPending.value && tagInfo.value.length > 0)
 
   return {
     page,
     pageSize,
-    blogInfo, 
+    blogInfo,
     blogTotalCount,
     tagInfo,
     blogPending,

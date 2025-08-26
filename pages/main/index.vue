@@ -36,7 +36,7 @@ const fmt = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short'
           </template>
           <div class="w-full flex flex-col md:flex-row gap-4">
             <div class="md:flex-1 flex flex-col items-start justify-between">
-              <p class="line-clamp-3">{{ post.textContent }}</p>
+              <div class="prose max-w-none" v-html="post.textContent" />
               <div class="w-full flex items-center justify-between mt-3">
                 <time :datetime="post.createTime">{{ fmt.format(new Date(post.createTime)) }}</time>
               </div>

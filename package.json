@@ -23,6 +23,7 @@
     "@tiptap/vue-3": "^3.0.9",
     "@tresjs/nuxt": "4.0.0",
     "eslint": "^9.0.0",
+    "isomorphic-dompurify": "^2.26.0",
     "nuxt": "^3.17.7",
     "pinia": "^3.0.3",
     "three": ">=0.133",
