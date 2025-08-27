@@ -24,18 +24,28 @@ type TagResp  = { data: Tag[];  status: number; }
 
 export function useHook() {
   const { $sanitize } = useNuxtApp()
+    const route = useRoute()
 
   // 分頁狀態
-  const page = ref(1)
-  const pageSize = ref(10)
+  const page = ref( Number(useRoute().query.page ?? 1) || 1 )
+  const pageSize = ref( Number(useRoute().query.pageSize ?? 10) || 10 )
 
+  // ----------------------------------------------------
+  // SSR
+  // ----------------------------------------------------
+  // SSR fetch
   const { data: blogResp, pending: blogPending } =
-    useApiFetch<BlogResp>('/blogs', { key: 'blogs:list' })
-
+  useApiFetch<BlogResp>(() => `/blogs?page=${page.value}&pageSize=${pageSize.value}`, {
+    key: () => `blogs:list:${page.value}:${pageSize.value}`,
+  })
+  // SSR fetch
   const { data: tagResp, pending: tagPending } =
-    useApiFetch<TagResp>('/tags', { key: 'tags:list' })
+    useApiFetch<TagResp>('/tags')
 
-  // ✅ 在這裡做 sanitize（不改動原資料，回傳一份處理後的）
+  // ----------------------------------------------------
+  // 資料解拆封
+  // ----------------------------------------------------
+  // 在這裡做 sanitize（不改動原資料，回傳一份處理後的）
   const blogInfo = computed<Blog[]>(() => {
     const rows = blogResp.value?.data ?? []
     return rows.map((b) => ({
@@ -57,6 +67,12 @@ export function useHook() {
   const blogTotalCount = computed(() => blogResp.value?.totalCount ?? 0)
   const tagInfo  = computed<Tag[]>(() => tagResp.value?.data ?? [])
   const tagReady = computed(() => !tagPending.value && tagInfo.value.length > 0)
+
+  const router = useRouter()
+  watch([page, pageSize], () => {
+    router.replace({ query: { ...route.query, page: String(page.value), pageSize: String(pageSize.value) } })
+    window.scrollTo({ top: 0, behavior: 'smooth' }) //換頁滾回頂部
+  })
 
   return {
     page,

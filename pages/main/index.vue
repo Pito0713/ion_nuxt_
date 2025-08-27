@@ -2,7 +2,7 @@
 import MainThreeCanvas from '~/components/common/MainThreeCanvas.client.vue'
 import { useHook } from './useHook'
 
-const { page, blogTotalCount, blogInfo, tagInfo, tagReady, tagPending } = useHook()
+const { page, pageSize, blogTotalCount, blogInfo, tagInfo, tagReady, tagPending } = useHook()
 
 // 讓 3D 元件在資料更新時重掛載（避免拿到空資料就初始化）：
 const canvasKey = computed(() => `tags-${tagInfo.value.length}`)
@@ -38,7 +38,6 @@ const fmt = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short'
             <div class="md:flex-1 flex flex-col items-start justify-between">
               <div class="prose max-w-none" v-html="post.textContent" />
               <div class="w-full flex items-center justify-between mt-3">
-                <time :datetime="post.createTime">{{ fmt.format(new Date(post.createTime)) }}</time>
               </div>
             </div>
           </div>
@@ -47,7 +46,7 @@ const fmt = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short'
     </ul>
     <div class="mt-4 flex items-center justify-between">
       <div />
-      <UPagination v-model="page" :total="blogTotalCount" />
+      <UPagination v-model:page="page" :total="blogTotalCount" :page-count="pageSize" color="primary" />
     </div>
   </LayoutsPage>
 </template>
