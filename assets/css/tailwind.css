@@ -30,7 +30,7 @@
 }
 
 
-.dark  {
+html.dark  {
   --ui-primary: var(--ui-primary-100);
   --ui-text-dimmed: var(--ui-primary-500);
   --ui-text-muted: var(--ui-primary-400);
@@ -51,11 +51,20 @@
   --ui-border-accented:  var(--color-white);
   --ui-border-inverted: var(--color-white);
 
+    --canvas-bg: #292828;
+  --ball-text: #ffffff;
+
   .text-black {
     color: var(--ui-primary);
   }
 
 }
+
+:root {
+  --canvas-bg: #ffffff;
+  --ball-text: #292828;
+}
+
 
 .tiptap :first-child {
   @apply mt-0;
