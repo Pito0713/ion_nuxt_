@@ -10,24 +10,21 @@ const props = defineProps({
 
 // 容器的引用，用於獲取 DOM 元素
 const container = ref(null)
-// Vue Router 實例，用於導航
 const router = useRouter()
 
 // Three.js 和物理模擬相關的核心變數
-let scene, camera, labelRenderer, animId
-let width = 0, height = 0, containerRect
+let scene = null, camera = null, labelRenderer = null, animId = null
+let width = 0, height = 0, containerRect = null
 let R_MIN = 16, R_MAX = 40
 
 // ===== 物理參數 =====
-const SPEED_BASE = 150 // 基礎速度
+const SPEED_BASE = 200 // 基礎速度
 const CENTER_K = 0.2 // 較小的中心吸引力，讓它們不會跑出畫面太遠
 const DRAG_PER_SEC = 0.2 // 降低阻力，讓它們能漂浮更久
-const RESTITUTION_BALL = 0.2 // 球與球之間的彈性碰撞係數
+const RESTITUTION_BALL = 1 // 球與球之間的彈性碰撞係數
 const RESTITUTION_WALL = 0.2 // 提高牆壁彈性係數，讓它們能彈開
 const SUBSTEPS = 2
 const STOP_EPS = 10 // 停止速度閾值
-const BG_COLOR = 0xffffff
-
 const BIAS_TOP_N = 1 // 出生偏置：前 N 顆球會盡量靠近中心出生
 
 // ----------------------------------------------------
@@ -62,7 +59,7 @@ let timeRange = {
   has: false // 是否有有效數據
 }
 function analyzeTime(items) {
-  const vals = items.map(i => Number(i?.time)).filter(n => Number.isFinite(n))
+  const vals = items.map(i => Number(i?.tagCount)).filter(n => Number.isFinite(n))
   if (!vals.length) return { min: 0, max: 1, has: false }
   const min = Math.min(...vals), max = Math.max(...vals)
   return { min, max, has: true }
@@ -86,7 +83,6 @@ function radiusRangeForWidth(w) {
   // minLimit = 16 → 最小不能小於 16px 半徑
   // maxLimit = 40 → 最大不能大於 40px 半徑
   const min = THREE.MathUtils.clamp(Math.round(w * 0.045), 16, 40)
-  
   const maxRaw = Math.round(w * 0.045)
   const max = THREE.MathUtils.clamp(maxRaw, min + 10, 120)
   return { R_MIN: min, R_MAX: max }
@@ -106,16 +102,7 @@ function createCircleElement({ r, label }) {
     border-radius:9999px;
     pointer-events:auto;
     touch-action:none;
-  `
-  //  /* 玻璃擬態效果 */
-  //   background: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
-  //   backdrop-filter: blur(15px); /* 毛玻璃模糊效果 */
-  //   -webkit-backdrop-filter: blur(10px); /* 兼容 Safari */
-  //   border: 1px solid rgba(255, 255, 255, 0.9); /* 淡邊框 */
-  //   /* 立體陰影效果 */
-  //   box-shadow:
-  //     inset 0 -4px 10px rgba(0, 0, 0, 0.1), /* 內陰影 */
-  //     0 4px 12px rgba(0, 0, 0, 0.2); /* 外陰影 */
+`
 
   // 置中文字
   const labelEl = document.createElement('div')
@@ -130,9 +117,9 @@ function createCircleElement({ r, label }) {
     letter-spacing:.5px;
     text-align:center;
     pointer-events:none;
-    color:rgba(20,20,20,0.85);
+    color: var(--ball-text);
     text-shadow:0 5px 5 rgba(255,255,255,0.85);
-    font-size:${Math.round( r / 2 )}px;
+    font-size:${Math.round(r)}px;
   `
   el.appendChild(labelEl)
 
@@ -219,11 +206,30 @@ function clampToBounds(x, y, r) {
   }
 }
 
+async function waitForNonZeroSize(el, timeout = 2000) {
+  const start = performance.now()
+  return new Promise((resolve) => {
+    const tryOnce = () => {
+      const w = el.clientWidth, h = el.clientHeight
+      if (w > 0 && h > 0) return resolve()
+      if (performance.now() - start > timeout) return resolve() // 超時也放行，避免卡死
+      requestAnimationFrame(tryOnce)
+    }
+    tryOnce()
+  })
+}
+
 // ----------------------------------------------------
 // 初始化 Three.js 場景、攝影機、渲染器，並生成所有球體
 // ----------------------------------------------------
 function setupScene() {
-  const colorMode = useColorMode()
+  if (!container.value) return
+  waitForNonZeroSize(container.value)
+
+  // 資料檢查：沒有資料就先不建（避免空白）
+  const dataItems = Array.isArray(props.data) ? props.data : []
+  if (!dataItems.length) return
+
   scene = new THREE.Scene()
 
   // 獲取容器尺寸
@@ -233,10 +239,7 @@ function setupScene() {
     // 根據容器寬度計算半徑範圍
     ; ({ R_MIN, R_MAX } = radiusRangeForWidth(width))
   // 用 BG_COLOR 當容器背景（可改成任意色或漸層）
-  const bg = `#${new THREE.Color(BG_COLOR).getHexString()}`
-  console.log(colorMode.value)
-  container.value.style.background =  bg 
-
+  container.value.style.background = 'var(--canvas-bg)'
 
   // 設定正交攝影機
   camera = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, -10, 10)
@@ -248,7 +251,8 @@ function setupScene() {
   Object.assign(labelRenderer.domElement.style, {
     position: 'absolute', top: '0', left: '0', pointerEvents: 'none'
   })
-  container.value.appendChild(labelRenderer.domElement)
+  // 將渲染器 DOM 元素添加到容器
+  container.value.appendChild(labelRenderer.domElement);
 
   // 生成圓形 DOM
   const placed = [] // 存放已放置球體的位置，用於避免重疊
@@ -262,7 +266,7 @@ function setupScene() {
   for (let i = 0; i < count; i++) {
     const item = items[i] ?? {}
     const sizeT =
-      Number.isFinite(Number(item.time)) ? timeToSizeT(Number(item.time))
+      Number.isFinite(Number(item.tagCount)) ? timeToSizeT(Number(item.tagCount))
         : (typeof item.size === 'number' ? THREE.MathUtils.clamp(item.size, 0, 1) : Math.random())
     const r = THREE.MathUtils.lerp(R_MIN, R_MAX, sizeT)
     spawnList.push({ item, sizeT, r })
@@ -377,6 +381,7 @@ function bindPointerHandlers(ball) {
 // 處理視窗大小改變事件，重新計算並更新所有球體的尺寸和位置
 // ----------------------------------------------------
 function onResize() {
+  if (!container.value || !labelRenderer || !camera) return;
   // 更新容器尺寸
   width = container.value.clientWidth
   height = container.value.clientHeight
@@ -413,13 +418,7 @@ function onResize() {
   labelRenderer.render(scene, camera)
 }
 
-// ----------------------------------------------------
-// 元件掛載後，初始化場景並啟動循環
-// ----------------------------------------------------
-onMounted(() => {
-  setupScene()
-  window.addEventListener('resize', onResize)
-
+function startLoop() {
   const clock = new THREE.Clock() // 用於計時，確保物理模擬的穩定性
   const maxDt = 0.03 // 最大時間步長
 
@@ -457,6 +456,44 @@ onMounted(() => {
     animId = requestAnimationFrame(tick)
   }
   tick()
+}
+
+// ---- 獨立的初始化函數 ----
+async function init() {
+  // 確保容器存在
+  if (!container.value) {
+    console.error('Container element not found.')
+    return
+  }
+
+  // 確保容器有尺寸後再繼續
+  await waitForNonZeroSize(container.value)
+
+  // 檢查是否已初始化，如果已初始化且有尺寸，就更新並跳過
+  if (labelRenderer) {
+    onResize()
+    if (!animId) startLoop() // 假設你有一個 startLoop 函數
+    return
+  }
+
+  // 重置並初始化場景
+  setupScene()
+  window.addEventListener('resize', onResize)
+  startLoop()
+}
+
+// ----------------------------------------------------
+// 元件掛載後，初始化場景並啟動循環
+// ----------------------------------------------------
+onMounted(() => {
+  // 初次加載，啟動初始化流程
+  init()
+})
+
+// KeepAlive：回來時恢復
+onActivated(() => {
+  // 切換回來時，再次啟動初始化流程
+  init()
 })
 
 // ----------------------------------------------------
@@ -465,8 +502,8 @@ onMounted(() => {
 function wallCollisions() {
   for (const b of balls) {
     const r = b.r + 30
-    const left = -width / 2 + r 
-    const right = width / 2 - r 
+    const left = -width / 2 + r
+    const right = width / 2 - r
     const top = height / 2 - r
     const bottom = -height / 2 + r
     const p = b.obj.position
@@ -524,10 +561,37 @@ function ballCollisions() {
 // 元件卸載前，清除所有事件監聽和動畫，避免記憶體洩漏
 // ----------------------------------------------------
 onBeforeUnmount(() => {
-  cancelAnimationFrame(animId)
-  window.removeEventListener('resize', onResize)
-  labelRenderer?.domElement?.remove()
+  if (animId) {
+    cancelAnimationFrame(animId);
+  }
+  window.removeEventListener('resize', onResize);
+  // 清除渲染器 DOM
+  if (labelRenderer) {
+    labelRenderer.domElement.remove();
+  }
 })
+// 確保在組件被真正卸載時，釋放所有 Three.js 資源
+onUnmounted(() => {
+  if (scene) {
+    // 遍歷並釋放所有 Three.js 物件的內存
+    while (scene.children.length > 0) {
+      const child = scene.children[0];
+      scene.remove(child);
+      if (child.isMesh) {
+        child.geometry.dispose();
+        if (child.material.isMaterial) {
+          child.material.dispose();
+        }
+      }
+    }
+  }
+  // 重置變數
+  scene = null;
+  camera = null;
+  labelRenderer = null;
+  animId = null;
+});
+
 </script>
 
 <template>
@@ -538,8 +602,9 @@ onBeforeUnmount(() => {
 .wrap {
   position: relative;
   width: 100%;
-  height: 70vh;
+  height: 45vh;
   overflow: hidden;
+  background: var(--canvas-bg);
 }
 </style>
 ```
