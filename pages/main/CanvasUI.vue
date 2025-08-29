@@ -2,7 +2,6 @@
 import MainThreeCanvas from '~/components/common/MainThreeCanvas.client.vue'
 import { useHook } from './useHook'
 const { tagInfo, tagReady, tagPending, canvasKey } = useHook()
-console.log(tagReady, 'tagReady')
 </script>
 
 <template>

@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { useHook } from './useHook'
-const { page, pageSize, blogTotalCount, blogInfo } = useHook()
-const fmt = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+const { page, pageSize, blogTotalCount, blogInfo, fmt } = useHook()
 </script>
 
 <template>
   <div>
-    <ul class="">
+    <ul>
       <li v-for="blog in blogInfo" :key="blog.id" class="py-6">
-        <UCard class="">
+        <UCard>
           <template #header>
             <NuxtLink :to="`/`" class="text-2xl">
               {{ blog.title }}
