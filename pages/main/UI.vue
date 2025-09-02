@@ -9,7 +9,7 @@ const { page, pageSize, blogTotalCount, blogInfo, fmt } = useHook()
       <li v-for="blog in blogInfo" :key="blog.id" class="py-6">
         <UCard>
           <template #header>
-            <NuxtLink :to="`/`" class="text-2xl">
+            <NuxtLink :to="`/single/${blog.id}`" class="text-2xl">
               {{ blog.title }}
             </NuxtLink>
           </template>
