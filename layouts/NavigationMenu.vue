@@ -6,7 +6,6 @@ import ColorModeButton from '../components/common/ColorModeButton.vue'
 const items = ref([
   [
     { label: 'main', icon: 'i-lucide-book-open', to: '/main?page=1&pageSize=10', class: 'justify-center items-center p-3' },
-    { label: 'single', icon: 'i-lucide-database', to: '/single', class: 'justify-center items-center p-3' },
     { label: 'postBlog', icon: 'i-lucide-database', to: '/postBlog', class: 'justify-center items-center p-3' },
     { label: 'test', icon: 'i-lucide-database', to: '/test', class: 'justify-center items-center p-3' },
     { label: 'logIn', icon: 'i-lucide-database', to: '/logIn', class: 'justify-center items-center p-3' },
