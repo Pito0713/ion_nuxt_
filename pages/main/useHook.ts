@@ -7,6 +7,7 @@ interface Blog {
   updateTime: string | null
   userUUID: string
   blogCounts: number
+  previewText: string | null
   tags: string[] | null
   textContent: string
 }

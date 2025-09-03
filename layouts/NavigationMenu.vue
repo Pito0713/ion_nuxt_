@@ -10,6 +10,7 @@ const items = ref([
     { label: 'test', icon: 'i-lucide-database', to: '/test', class: 'justify-center items-center p-3' },
     { label: 'logIn', icon: 'i-lucide-database', to: '/logIn', class: 'justify-center items-center p-3' },
     { label: 'register', icon: 'i-lucide-database', to: '/register', class: 'justify-center items-center p-3' },
+    { label: 'tag', icon: 'i-lucide-tag', to: '/tag', class: 'justify-center items-center p-3' },
     { slot: 'components' as const }
   ]
 ] satisfies NavigationMenuItem[][])

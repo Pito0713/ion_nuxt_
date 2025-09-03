@@ -40,7 +40,7 @@ export function useHook() {
     )
     if(res.status === 1) {
       tagItems.value = (res?.data ?? []).map(e => ({ label: e.label, uuid: e.uuid }))
-      form.value.tag = tagItems.value[0].uuid || ''
+      form.value.tag = ''
     }
   }
 
