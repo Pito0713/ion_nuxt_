@@ -1,8 +1,13 @@
 // composables/useHook.ts
+type Blog = {
+  id: string
+  title: string
+}
 interface Tag {
   uuid: string
   label: string
-  tagCount: number
+  tagCount: number,
+  blogs: Blog[]
 }
 
 type TagResp  = { data: Tag[];  status: number; }

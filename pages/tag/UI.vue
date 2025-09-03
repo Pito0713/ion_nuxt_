@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { useHook } from './useHook'
 const { tagInfo } = useHook()
-
-console.log(tagInfo)
 </script>
 
 <template>
   <div>
-    <ul>
-      <li v-for="blog in tagInfo" :key="blog.uuid" class="py-6">
-        <UCard>
-          <div class="w-full flex flex-col md:flex-row gap-4">
-            <a>{{ blog.label }} </a>
-          </div>
-        </UCard>
-      </li>
-    </ul>
+    <UAccordion :items="tagInfo">
+      <template #content="{ item }">
+        <ul>
+          <li v-for="blog in item.blogs" :key="blog.id" class="py-2">
+            <NuxtLink :to="`/single/${blog.id}`">
+              {{ blog.title }}
+            </NuxtLink>
+          </li>
+        </ul>
+      </template>
+    </UAccordion>
   </div>
 </template>

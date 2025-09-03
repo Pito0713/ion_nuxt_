@@ -15,7 +15,7 @@ const { page, pageSize, blogTotalCount, blogInfo, fmt } = useHook()
           </template>
           <div class="w-full flex flex-col md:flex-row gap-4">
             <div class="md:flex-1 flex flex-col items-start justify-between">
-              <div class="prose max-w-none" v-html="blog.textContent" />
+              <div class="prose max-w-none">{{ blog.previewText  }} </div>
               <div class="w-full flex items-center justify-between mt-3">
                 <time :datetime="blog.createTime">{{ fmt.format(new Date(blog.createTime)) }}</time>
               </div>
