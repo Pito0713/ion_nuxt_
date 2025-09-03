@@ -40,7 +40,7 @@ const create_tags = () => {
         <UButton label="新增tag" color="neutral" variant="subtle" />
       </template>
       <template #body>
-        <UInput :model-value="props.addTagValue" @update:model-value="value => emit('update:addTagValue', value)" />
+        <UInput :model-value="props.addTagValue" @update:model-value="(_value: string) => emit('update:addTagValue', _value)" />
       </template>
       <template #footer>
         <UButton type="button" color="primary" @click="create_tags">確認</UButton>
@@ -48,17 +48,21 @@ const create_tags = () => {
     </UIModal>
     <UForm :state="props.form" :schema="schema" @submit="emit('form-submit')">
       <UFormField label="狀態" name="tag">
-        <UInputMenu :model-value="props.form.tag" :items="props.tagItems" value-key="uuid"
-          @update:modelValue="v => emit('update:form', { ...props.form, tag: v })" />
+        <UInputMenu
+          :model-value="props.form.tag" :items="props.tagItems" value-key="uuid"
+          @update:model-value="(_value: object)  => emit('update:form', { ...props.form, tag: _value})" />
       </UFormField>
       <UFormField label="標題" name="title">
-        <UInput :model-value="props.form.title"
-          @update:modelValue="v => emit('update:form', { ...props.form, title: v })" />
+        <UInput 
+          :model-value="props.form.title"
+          @update:model-value="(_value: string) => emit('update:form', { ...props.form, title: _value })" 
+        />
       </UFormField>
       <UFormField label="內容" name="content">
         <client-only>
-          <TiptapEditor :model-value="props.form.content"
-            @update:modelValue="v => emit('update:form', { ...props.form, content: v })" />
+          <TiptapEditor 
+            :model-value="props.form.content"
+            @update:model-value="(_value: string) => emit('update:form', { ...props.form, content: _value })" />
         </client-only>
       </UFormField>
       <UButton type="submit" color="neutral" variant="outline">送出</UButton>
