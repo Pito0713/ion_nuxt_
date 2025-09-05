@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UI from './UI.vue'
 import { useHook } from './useHook'
+definePageMeta({ middleware: ['auth'] })
 
 const { createTags, formSubmit, tagItems, addTagValue, form } = useHook()
 </script>
