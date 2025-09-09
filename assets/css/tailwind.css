@@ -37,22 +37,22 @@ html.dark  {
   --ui-text-toned: var(--ui-primary-300);
   --ui-text: var(--ui-primary-200);
   --ui-text-primary: var(--ui-primary-200);
-  --ui-text-highlighted: var(--color-white);
+  --ui-text-highlighted: var(--ui-primary-100);
   --ui-text-inverted: var(--ui-primary-900);
 
   --ui-bg: var(--ui-primary-800);
   --ui-bg-muted: var(--ui-primary-600);
-  --ui-bg-elevated: var(--ui-primary-700);
+  --ui-bg-elevated: var(--ui-primary-600);
   --ui-bg-accented: var(--ui-primary-500);
-  --ui-bg-inverted: var(--color-white);
+  --ui-bg-inverted: var(--ui-primary-100);
 
   --ui-border: var(--ui-primary-800);
   --ui-border-muted: var(--ui-primary-700);
-  --ui-border-accented:  var(--color-white);
-  --ui-border-inverted: var(--color-white);
+  --ui-border-accented: var(--ui-primary-100);
+  --ui-border-inverted: var(--ui-primary-100);
 
-    --canvas-bg: #292828;
-  --ball-text: #ffffff;
+  --canvas-bg: var(--ui-primary-800);
+  --ball-text: var(--ui-primary-100);
 
   .text-black {
     color: var(--ui-primary);
@@ -60,22 +60,20 @@ html.dark  {
 
 }
 
-:root {
-  --canvas-bg: #ffffff;
-  --ball-text: #292828;
-}
-
-
 .tiptap :first-child {
-  @apply mt-0;
+  @apply mt-2;
 }
 
 .tiptap.ProseMirror {
-  @apply min-h-[10rem] p-2 rounded-[0.2rem] min-h-[10rem] border-2
+  @apply h-150 px-5 py-3 rounded-[0.2rem] border-2 overflow-x-auto whitespace-pre-wrap;
 }
 
 .tiptap.ProseMirror.ProseMirror-focused {
   @apply outline-none
+}
+
+.tiptap p {
+  @apply my-2
 }
 
 .tiptap h1 {
@@ -92,16 +90,16 @@ html.dark  {
 
 /* Code and preformatted text styles */
 .tiptap code {
-  @apply bg-neutral-200 rounded-[0.2rem] text-black text-[0.85rem] px-[0.3em] py-[0.25em];
+  @apply bg-neutral-200 rounded-[0.1rem] text-black text-[0.85rem] px-[0.3em] py-[0.25em] ;
 }
 
 .tiptap pre {
-  @apply bg-neutral-200 rounded-[0.2rem] text-black font-mono p-[0.75rem] pl-[1rem] w-full overflow-x-auto whitespace-pre-wrap;
+  @apply bg-neutral-200 rounded-[0.2rem] text-black px-[0.6em] py-[0.5em] my-1 overflow-x-auto whitespace-pre-wrap inline-block;
 }
 
 .tiptap pre code {
   @apply bg-transparent text-inherit text-[0.85rem] whitespace-pre-wrap;
-    word-break: break-all;
+  word-break: break-all;
   overflow-wrap: break-word; /* 較新的標準屬性 */
 }
 
@@ -110,19 +108,19 @@ html.dark  {
 }
 
 .tiptap hr {
-  @apply border-t border-gray-300 my-3;
+  @apply border-t border-gray-300 my-3 ;
 }
 
 /* Lists */
 .tiptap ul {
-  @apply list-disc list-outside ml-6;
+  @apply list-disc list-outside ml-6 m-2;
 }
 
 .tiptap ol {
-  @apply list-decimal list-outside  ml-6;
+  @apply list-decimal list-outside ml-6 m-2;
 }
 
 .tiptap li {
-  @apply mb-2;
+  @apply mb-3;
 }
 
