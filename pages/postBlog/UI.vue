@@ -39,24 +39,34 @@ const { addTagValue, createTags, } = useHook()
 </script>
 
 <template>
-  <LayoutsPage>
-    <AddTagModal v-model:add-tag-value="addTagValue" @create-tags="createTags" />
-    <UForm :state="props.form" :schema="schema" @submit="emit('form-submit')">
-      <UFormField label="狀態" name="tag">
-        <UInputMenu :model-value="props.form.tag" :items="props.tagItems" value-key="uuid"
-          @update:model-value="(_value: object) => emit('update:form', { ...props.form, tag: _value })" />
-      </UFormField>
-      <UFormField label="標題" name="title">
-        <UInput :model-value="props.form.title"
-          @update:model-value="(_value: string) => emit('update:form', { ...props.form, title: _value })" />
-      </UFormField>
-      <UFormField label="內容" name="content">
+    <UForm class="md:mt-4" :state="props.form" :schema="schema" @submit="emit('form-submit')" >
+      <div class="md:flex items-start justify-between">
+        <div class="md:flex mb-3">
+          <UFormField label="標題" name="title" class="mr-3">
+            <UInput 
+              :model-value="props.form.title"
+              @update:model-value="(_value: string) => emit('update:form', { ...props.form, title: _value })" />
+          </UFormField>
+          <UFormField label="狀態" name="tag" class="mt-3 md:mt-0">
+            <UInputMenu
+              size="xl"
+              class="mr-3"
+              :model-value="props.form.tag" 
+              :items="props.tagItems" 
+              value-key="uuid"
+              @update:model-value="(_value: object) => emit('update:form', { ...props.form, tag: _value })" 
+            />
+            <AddTagModal class="mt-3 md:mt-0" v-model:add-tag-value="addTagValue" @create-tags="createTags" />
+          </UFormField>
+        </div>
+        <UButton class="mb-2 md:mt-6 w-20" type="submit" color="neutral" >送出</UButton>
+      </div>
+      <UFormField name="content">
         <client-only>
-          <TiptapEditor :model-value="props.form.content"
+          <TiptapEditor 
+            :model-value="props.form.content"
             @update:model-value="(_value: string) => emit('update:form', { ...props.form, content: _value })" />
         </client-only>
       </UFormField>
-      <UButton type="submit" color="neutral" variant="outline">送出</UButton>
     </UForm>
-  </LayoutsPage>
 </template>

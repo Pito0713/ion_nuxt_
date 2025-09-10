@@ -7,7 +7,7 @@ export function useHook() {
   // ----------------------------------------------------
   const addTagValue = ref('') //  value for tag addinput
   const tagItems = ref<{ label: string, uuid: string }[]>([]) // tag items for select
-  const form = ref({ tag:'' , title: '', content: '🎉' })
+  const form = ref({ tag:'' , title: '', content: '' })
 
   // ----------------------------------------------------
   // Type Interface
