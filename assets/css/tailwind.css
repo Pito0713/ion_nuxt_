@@ -6,6 +6,7 @@
 	 /* 主色（Base） */
   --ui-primary:       #212121;
 	--color-white: 		  #ffffff;
+  --ui-error:         #f74848;
 
   /* Primary 色階 */
   --ui-primary-100:   #e4e5e6;
@@ -57,6 +58,7 @@ html.dark  {
   .text-black {
     color: var(--ui-primary);
   }
+  
 
 }
 
