@@ -1,14 +1,26 @@
 export function useHook() {
-  // ---- UI hook ----
+  // ---- hook ----
   const toast = useToast()
-  // ---- statement ----
+
+  // ----------------------------------------------------
+  // stateMent
+  // ----------------------------------------------------
   const addTagValue = ref('') //  value for tag addinput
   const tagItems = ref<{ label: string, uuid: string }[]>([]) // tag items for select
-  const form = ref({ tag:'' , title: '', content: '🎉' })
-  // ---- Type Interface ----
+  const form = ref({ tag:'' , title: '', content: '' })
+
+  // ----------------------------------------------------
+  // Type Interface
+  // ----------------------------------------------------
   type Tag = { uuid: string; label: string }
   type TagResp = { data: Tag[]; status: number }
 
+  // ----------------------------------------------------
+  // API
+  // @API POST /tags  新增標籤
+  // @API GET /tags  取得標籤
+  // @API POST /blogs  文章發佈
+  // ----------------------------------------------------
   // @API POST /tags  新增標籤
   async function createTags() {
     const payload = { label: addTagValue.value }
@@ -44,7 +56,7 @@ export function useHook() {
     }
   }
 
-  // @API GET /tags  取得標籤
+  // @API POST /blogs  文章發佈
   async function postBlogs() {
     const payload = {
       tag: form.value.tag,
@@ -72,6 +84,9 @@ export function useHook() {
     }
   }
 
+  // ----------------------------------------------------
+  // function
+  // ----------------------------------------------------
   async function formSubmit() {
     postBlogs()
   }

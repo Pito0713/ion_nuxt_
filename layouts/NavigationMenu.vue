@@ -11,7 +11,8 @@ const menuItems = computed<NavigationMenuItem[][]>(() => [[
   { label: 'main', icon: 'i-lucide-book-open', to: '/main?page=1&pageSize=10', class: 'justify-center items-center p-3' },
   { label: 'tag', icon: 'i-lucide-tag', to: '/tag', class: 'justify-center items-center p-3' },
   ...(authed.value ? [
-    { label: 'postBlog', icon: 'i-lucide-database', to: '/postBlog', class: 'justify-center items-center p-3' }
+    { label: 'postBlog', icon: 'i-lucide-database', to: '/postBlog', class: 'justify-center items-center p-3' },
+    { label: 'editTag', icon: 'i-lucide-database', to: '/editTag', class: 'justify-center items-center p-3' }
   ] : []),
   { slot: 'components' as const },
 ]])

@@ -2,13 +2,11 @@
 import UI from './UI.vue'
 import { useHook } from './useHook'
 definePageMeta({ middleware: ['auth'] })
-
-const { createTags, formSubmit, tagItems, addTagValue, form } = useHook()
+const { formSubmit, tagItems, form } = useHook()
 </script>
 
 <template>
   <LayoutsPage>
-    <UI v-model:add-tag-value="addTagValue" v-model:form="form" :tag-items="tagItems" @create-tags="createTags"
-      @form-submit="formSubmit" />
+    <UI v-model:form="form" :tag-items="tagItems" @form-submit="formSubmit" />
   </LayoutsPage>
 </template>
