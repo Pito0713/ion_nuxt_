@@ -15,6 +15,7 @@ const menuItems = computed<NavigationMenuItem[][]>(() => [[
     { label: 'editTag', icon: 'i-lucide-database', to: '/editTag', class: 'justify-center items-center p-3' }
   ] : []),
   { slot: 'components' as const },
+  { label: 'test', icon: 'i-lucide-tag', to: '/test', class: 'justify-center items-center p-3' },
 ]])
 
 const isOpen = ref(false)
