@@ -1,8 +1,7 @@
 <script setup lang="ts">
+import Modal from './Modal.vue';
 import { useHook } from './useHook'
 const { tagInfo } = useHook()
-console.log(tagInfo)
-import Modal from './Modal.vue';
 </script>
 
 <template>
