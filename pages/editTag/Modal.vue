@@ -1,17 +1,26 @@
 <script setup lang="ts">
 import UIModal from '~/components/common/UIModal.vue'
-const props = defineProps<{
-  tagInfo: {
-    uuid: string
-    label: string
-    tagCount: number,
-  }
-}>()
-const state = reactive({
-  label: props.tagInfo.label,
-})
-
-const showModal = ref(false)
+import { useModalHook } from './useModalHook'
+type TagInfo = {
+  uuid: string
+  label: string
+  tagCount: number
+  imgURL?: string | null
+  imgFileId?: string | null
+}
+const props = defineProps<{ tagInfo: TagInfo }>()
+const {
+  coverInputRef,
+  showUrl,
+  hasPicked,
+  showModal,
+  pending,
+  state,
+  openPicker,
+  onPick,
+  resetCover,
+  submit,
+} = useModalHook(props)
 </script>
 
 <template>
@@ -21,43 +30,37 @@ const showModal = ref(false)
     </template>
     <template #body>
       <div class="flex items-center justify-between">
-        <p class="text-sm text-muted-foreground">ID: {{ props.tagInfo.uuid }} </p>
+        <p class="text-sm text-muted-foreground">ID: {{ props.tagInfo.uuid }}</p>
       </div>
-
-      <!-- 表單 -->
-      <UForm :state="state" class="space-y-6" @submit.prevent="">
-        <UFormField label="名稱" name="label" :help="'顯示名稱（必填）'">
-          <UInput v-model="state.label" placeholder="例如：前端、旅遊、攝影" />
+      <UForm :state="state" class="space-y-6" @submit.prevent="submit">
+        <UFormField label="名稱" name="label" :help="'名稱（必填）'">
+          <UInput v-model="state.label" placeholder="請輸入名稱" />
         </UFormField>
-
-        <!-- 封面 -->
         <div class="space-y-3">
           <h3 class="text-base font-semibold">封面圖片</h3>
           <div class="flex items-start gap-4">
             <div class="w-40 h-40 rounded-xl border bg-muted/20 overflow-hidden flex items-center justify-center">
-              <img alt="cover" class="h-full w-full object-cover" />
-              <span class="text-xs text-muted-foreground">尚未選擇</span>
+              <template v-if="showUrl">
+                <img :src="showUrl" alt="cover" class="h-full w-full object-cover" />
+              </template>
+              <template v-else>
+                <span class="text-xs text-muted-foreground">尚未選擇</span>
+              </template>
             </div>
             <div class="flex flex-col gap-2">
               <div class="flex gap-2">
-                <UButton variant="solid">選擇圖片</UButton>
-                <UButton variant="ghost">
-                  還原
-                </UButton>
+                <label>
+                  <UButton variant="solid" icon="i-lucide-image" @click.prevent="openPicker">選擇圖片</UButton>
+                </label>
+                <UButton variant="ghost" :disabled="!hasPicked" @click="resetCover">清除</UButton>
               </div>
-              <p class="text-xs text-muted-foreground">支援 JPG / PNG / WebP / AVIF，最大MB。</p>
-              <input ref="coverInputRef" type="file" accept="image/*" class="hidden" />
+              <p class="text-xs text-muted-foreground">支援 JPG / PNG / WebP / AVIF，最大 10MB。</p>
+              <input ref="coverInputRef" type="file" accept="image/*" class="hidden" @change="onPick" />
             </div>
           </div>
         </div>
-
-
-        <!-- 相簿（多圖） -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-end gap-3">
-            <UButton variant="ghost">重設</UButton>
-            <UButton type="submit">儲存變更</UButton>
-          </div>
+        <div class="flex items-center justify-end gap-3">
+          <UButton type="submit" :loading="pending">儲存變更</UButton>
         </div>
       </UForm>
     </template>
