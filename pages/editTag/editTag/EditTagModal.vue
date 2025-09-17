@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UIModal from '~/components/common/UIModal.vue'
-import { useModalHook } from './useModalHook'
+import { useEditTagHook } from './useEditTagHook'
 type TagInfo = {
   uuid: string
   label: string
@@ -20,20 +20,21 @@ const {
   onPick,
   resetCover,
   submit,
-} = useModalHook(props)
+} = useEditTagHook(props)
 </script>
 
 <template>
-  <UIModal v-model="showModal" title="編輯 Tag" open-title=" Modal">
+  <UIModal v-model="showModal" title="編輯 Tag" open-title="Modal">
     <template #default>
       <UButton label="編輯" color="neutral" variant="subtle" />
     </template>
     <template #body>
-      <div class="flex items-center justify-between">
-        <p class="text-sm text-muted-foreground">ID: {{ props.tagInfo.uuid }}</p>
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-base font-semibold">ID: {{ props.tagInfo.uuid }}</p>
       </div>
       <UForm :state="state" class="space-y-6" @submit.prevent="submit">
-        <UFormField label="名稱" name="label" :help="'名稱（必填）'">
+        <a class="text-base font-semibold mb-6">名稱</a>
+        <UFormField name="label" :help="'名稱（必填）'" class="mt-2">
           <UInput v-model="state.label" placeholder="請輸入名稱" />
         </UFormField>
         <div class="space-y-3">

@@ -1,18 +1,12 @@
 
 import { useImageKitUpload } from '~/composables/useImageKitUpload'
-export function useModalHook(props: { tagInfo: { uuid: string
-  label: string
-  tagCount: number
-  imgURL?: string | null
-  imgFileId?: string | null } } ) {
+export function useAddTagHook() {
   const toast = useToast()
   const coverInputRef = ref<HTMLInputElement | null>(null)
   const pickedFile = ref<File | null>(null)
   const previewUrl = ref<string | null>(null)
-  const originalUrl = ref<string>(props.tagInfo.imgURL ?? '')
-  const originalFileId = ref<string>(props.tagInfo.imgFileId ?? '')
   const MAX = 10 * 1024 * 1024 // 10MB
-  const showUrl = computed(() => previewUrl.value || originalUrl.value || '')
+  const showUrl = computed(() => previewUrl.value || '')
   const hasPicked = computed(() => !!pickedFile.value)
 
   function openPicker() {
@@ -49,7 +43,7 @@ export function useModalHook(props: { tagInfo: { uuid: string
   const pending = ref(false)
   // 表單狀態
   const state = reactive({
-    label: props.tagInfo.label ?? ''
+    label: ''
   })
 
   async function submit() {
@@ -61,7 +55,7 @@ export function useModalHook(props: { tagInfo: { uuid: string
 
     pending.value = true
     try {
-      let nextUrl = originalUrl.value
+      let nextUrl = ''
 
       // 若使用者選了新圖，先直傳 ImageKit
       if (pickedFile.value) {
@@ -69,7 +63,7 @@ export function useModalHook(props: { tagInfo: { uuid: string
         nextUrl = url
       }
       const res:{status: number} = await useApiAsync(
-        `/tags/${props.tagInfo.uuid}`, 
+        `/tags`, 
         { 
           method: 'POST',
           body: {
@@ -92,7 +86,6 @@ export function useModalHook(props: { tagInfo: { uuid: string
       }
 
       // 更新本地原始資料、清掉暫存檔，對父層發事件
-      originalUrl.value = nextUrl
       resetCover()
       showModal.value = false
     } catch (err: unknown) {
