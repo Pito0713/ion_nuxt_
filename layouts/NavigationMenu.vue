@@ -42,17 +42,15 @@ const onShowRegisterModal = () => {
   <div>
     <div>
       <!-- 桌面版導覽 -->
-      <aside class="hidden md:flex fixed left-0 top-0 h-screen w-64 z-40 overflow-y-auto">
+      <aside class="hidden md:flex absolute left-0 top-0 h-screen w-64 z-40 overflow-y-auto">
         <div class="flex flex-col w-full p-4 gap-4 overflow-y-auto">
-          <a class="text-2xl font-bold">BLOG</a>
           <div class="w-full flex items-center justify-center flex-col gap-2">
             <div @mousedown="startPress" @mouseup="endPress" @mouseleave="endPress" @touchstart="startPress"
               @touchend="endPress">
               <div class="w-40 h-40 rounded-full border-2 overflow-hidden">
-                <img src="/public/favicon.ico" alt="Logo" class="w-full h-full object-cover" />
+                <img src="" alt="Logo" class="w-full h-full object-cover" />
               </div>
             </div>
-            <a class="text-2xl font-bold">ion筆記</a>
             <div>
               <UIModal v-if="showLogin" v-model="showLogInModal" title="登入" open-title=" Modal">
                 <template #default>

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-svh">
+  <div class="min-h-svh  md:max-w-[876px] lg:max-w-[1024px] mx-auto flex">
     <main class='relative md:flex'>
       <NavigationMenu />
       <NuxtPage class="md:ml-64" />

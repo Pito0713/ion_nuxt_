@@ -92,38 +92,54 @@ function radiusRangeForWidth(w) {
 // 建立球體的 DOM 元素
 // @param {object} { 半徑 r, 標籤文字 label, 路由 route } 
 // ----------------------------------------------------
-function createCircleElement({ r, label }) {
+function createCircleElement({ r, label, imgUrl }) {
   // 圓形容器
-  const el = document.createElement('div')
+  const el = document.createElement('div');
   el.style.cssText = `
-    position:relative;
-    width:${r * 3}px;
-    height:${r * 3}px;
-    border-radius:9999px;
-    pointer-events:auto;
-    touch-action:none;
-`
+    position: relative;
+    width:${r * 4}px;
+    height:${r * 4}px;
+    border-radius: 9999px;
+    pointer-events: auto;
+    touch-action: none;
+    overflow: hidden; /* 確保子元素不會超出圓形容器 */
+  `;
+
+  // 圖片 element
+  const imgEl = document.createElement('img');
+  imgEl.src = imgUrl; // 設定圖片來源
+  imgEl.style.cssText = `
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    object-fit: cover; /* 讓圖片填滿整個圓形 */
+    pointer-events: none;
+  `;
+  el.appendChild(imgEl); // 將圖片加入到主容器
+
 
   // 置中文字
-  const labelEl = document.createElement('div')
-  labelEl.textContent = label ?? ''
+  const labelEl = document.createElement('div');
+  labelEl.textContent = label ?? '';
   labelEl.style.cssText = `
-    position:absolute; 
-    inset:0;
-    display:flex; 
-    align-items:center; 
-    justify-content:center;
-    font-weight:800;
-    letter-spacing:.5px;
-    text-align:center;
-    pointer-events:none;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    letter-spacing: .5px;
+    text-align: center;
+    pointer-events: none;
     color: var(--ball-text);
-    text-shadow:0 5px 5 rgba(255,255,255,0.85);
+    text-shadow: 0 5px 5px rgba(255, 255, 255, 0.85);
     font-size:${Math.round(r)}px;
-  `
-  el.appendChild(labelEl)
+  `;
+  el.appendChild(labelEl); // 將文字加入到主容器
 
-  return { el, labelEl }
+  return { el, labelEl };
 }
 // ----------------------------------------------------
 // 產生一個「隨機且不與已放置物件重疊」的位置（均勻分布）
@@ -276,8 +292,7 @@ function setupScene() {
   // 創建並放置每個球體
   for (let i = 0; i < spawnList.length; i++) {
     const { item, sizeT, r } = spawnList[i]
-    const { el, labelEl } = createCircleElement({ r, label: item.label, route: item.route })
-
+    const { el, labelEl } = createCircleElement({ r, label: item.label, route: item.route, imgUrl: item.imgURL })
     const obj = new CSS2DObject(el)
     // BIAS_TOP_N 顆球會盡量靠近中心出生，其餘隨機分布
     const [x, y] = (i < BIAS_TOP_N) ? nearCenterNonOverlap(placed, r)

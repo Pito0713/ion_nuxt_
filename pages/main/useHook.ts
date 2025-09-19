@@ -8,7 +8,7 @@ interface Blog {
   userUUID: string
   blogCounts: number
   previewText: string | null
-  tags: string[] | null
+  tag: { imgURL: string; label: string } | null
   textContent: string
 }
 
@@ -95,7 +95,15 @@ export function useHook() {
   // 其他
   // ----------------------------------------------------
   // 日期格式化
-  const fmt = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+  function formatDate(_value: Date | string): string {
+    const date = new Date(_value);
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
 
   return {
     page,
@@ -107,6 +115,6 @@ export function useHook() {
     blogPending,
     tagPending,
     tagReady,
-    fmt,
+    formatDate,
   }
 }

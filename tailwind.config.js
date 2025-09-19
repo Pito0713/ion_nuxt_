@@ -8,7 +8,21 @@ export default {
     "./app.vue",
     "./error.vue",
   ],
-  theme: {},
+  theme: {
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        lg: '1.5rem',
+      },
+      // sm：滿版、md：576px、lg：1024px
+      screens: {
+        sm: '100%',
+        md: '876px',
+        lg: '1024px',
+      },
+    },
+  },
   plugins: [require('@tailwindcss/line-clamp')]
 }
 
